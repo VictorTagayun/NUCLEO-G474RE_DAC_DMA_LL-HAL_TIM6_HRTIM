@@ -348,7 +348,85 @@ Add together
 *## Suggestions and Observations  
 	
 	It is still ok to use HAL instead of LL because the codes will be used only during init.
+
+### Timing of DMA Interrupt
+
+	void DMA1_Channel1_IRQHandler(void)
+	{
+	  /* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
+
+	  GPIOC->BSRR = (1<<(8));
+
+	  /* USER CODE END DMA1_Channel1_IRQn 0 */
+	  HAL_DMA_IRQHandler(&hdma_dac3_ch1);
+	  /* USER CODE BEGIN DMA1_Channel1_IRQn 1 */
+
+	  GPIOC->BSRR = (1<<(8+16));
+
+	  /* USER CODE END DMA1_Channel1_IRQn 1 */
+	}
+1uS
+![]()
+
+970nS
+![]()
+
+### Timing of DMA Callback  
+
+	void HAL_DAC_ConvCpltCallbackCh1(DAC_HandleTypeDef *hdac)
+	{
+	  /* Prevent unused argument(s) compilation warning */
+	  UNUSED(hdac);
+
+	  /* NOTE : This function should not be modified, when the callback is needed,
+				the HAL_DAC_ConvCpltCallbackCh1 could be implemented in the user file
+	   */
+	  GPIOC->BSRR = (1<<(8));
+	}
+
+	void HAL_DAC_ConvHalfCpltCallbackCh1(DAC_HandleTypeDef *hdac)
+	{
+	  /* Prevent unused argument(s) compilation warning */
+	  UNUSED(hdac);
+
+	  /* NOTE : This function should not be modified, when the callback is needed,
+				the HAL_DAC_ConvHalfCpltCallbackCh1 could be implemented in the user file
+	   */
+	  GPIOC->BSRR = (1<<(8+16));
+	}
 	
+![]()
+
+### Timing of DMA Callback  
+![]()
+
+### Timing of HAL_DAC_Start_DMA (1.25mS)  
+	  GPIOC->BSRR = (1<<(8));
+	  /*##- Enable DAC Channel and associated DMA ##############################*/
+	  if(HAL_OK != HAL_DAC_Start_DMA(&hdac3, DAC_CHANNEL_1,
+					   (uint32_t*)MySine2000, MySine2000_SIZE, DAC_ALIGN_12B_R))
+	  {
+		/* Start DMA Error */
+		Error_Handler();
+	  }
+	  GPIOC->BSRR = (1<<(8+16));
+![]()
+
+### Find where/what ode to update/change the new data to feed to DMA, in _stm32g4xx_hal_dac.c_
+
+#### Error
+HAL_DAC_Start_DMA (stm32g4xx_hal_dac.c) > HAL_DMA_Start_IT (stm32g4xx_hal_dma.c) > DMA_SetConfig
+	
+	DMA_SetConfig(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t DstAddress, uint32_t DataLength)
+	where:  
+		*hdma = hdac3->DMA_Handle1
+		SrcAddress = MySine2000 / MySine4000
+		DstAddress = (uint32_t)&hdac->Instance->DHR12R2 (DAC_ALIGN_12B_R/DHR12R2)
+		DataLength = MySine2000/MySine4000_SIZE
+
+#### Use LL_DMA_ConfigAddresses
+
+
 ### Online sine generator
 
 https://www.daycounter.com/Calculators/Sine-Generator-Calculator.phtml
