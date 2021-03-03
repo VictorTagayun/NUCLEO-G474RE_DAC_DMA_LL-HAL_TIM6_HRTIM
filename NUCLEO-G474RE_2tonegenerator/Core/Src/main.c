@@ -117,9 +117,15 @@ int main(void)
 	  MySine2000[cntr] = MySine2000[cntr] + MySine200[cntr % MySine200_SIZE];
   }
 
+	printf("Sine1k_15k = 1k + 10k \n");
+	for (uint16_t cntr = 0; cntr < Sine1k_15k_SIZE; cntr++)
+	{
+	  printf("%d %d\n",cntr, Sine1k_15k[cntr]);
+	}
+
   /*##- Enable DAC Channel and associated DMA ##############################*/
   if(HAL_OK != HAL_DAC_Start_DMA(&hdac3, DAC_CHANNEL_1,
-  				   (uint32_t*)MySine2000, MySine2000_SIZE, DAC_ALIGN_12B_R))
+  				   (uint32_t*)Sine1k_15k, Sine1k_15k_SIZE, DAC_ALIGN_12B_R))
   {
   	/* Start DMA Error */
   	Error_Handler();
