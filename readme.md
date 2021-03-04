@@ -178,9 +178,9 @@ in Main.c
 ## Waveform of Sine12bit  
 		
 	const uint16_t Sine12bit[32] = { 511,  611,  707,  796,  873,  937,  984, 1013,
-							1023, 1013,  984,  937,  873,  796,  707,  611,
-							 511,  412,  315,  227,  149,   86,   38,    9,
-							   0,    9,   38,   86,  149,  227,  315,  412};
+					1023, 1013,  984,  937,  873,  796,  707,  611,
+					 511,  412,  315,  227,  149,   86,   38,    9,
+					   0,    9,   38,   86,  149,  227,  315,  412};
 	
 ![Waveform of Sine12bit](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint82.jpg)
 		
@@ -223,7 +223,8 @@ As can be seen, Excel waveform is better than the DAC because Excel is connectin
 The actual waveform of *Sine1k_15k* is not of very good resolution. So I generated another array using Online sine generator
 		
 Sinewave 1kHz, DMA is 2MSPS (500nS)  
-	uint32_t MySine2000[] =  
+
+	uint32_t MySine2000[] =
 	{
 		683,685,687,689,691,693,695,698,700,702,704,706,708,710,713,715,717,719,721,723,
 		725,727,730,732,734,736,738,740,742,745,747,749,751,753,755,757,760,762,764,766,
@@ -331,10 +332,13 @@ Actual waveform
 ![MySine2000](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint91.jpg)
 
 Add offset  
+
 	MySine2000[cntr] = MySine2000[cntr] + 682;  
+	
 ![Add offset](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint92.jpg)
 
 Sine 10k, DMA is 2MSPS (500nS)   
+
 	const uint32_t MySine200[] =
 	{
 		683,704,725,747,768,789,810,831,852,873,893,914,934,954,973,992,1011,1030,1048,1066,
@@ -353,7 +357,9 @@ Actual waveform
 ![Sine 10k](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint93.jpg)
 
 Add together
+
 	MySine2000[cntr] = MySine2000[cntr] + MySine200[cntr % MySine200_SIZE];
+	
 ![Add together](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint94.jpg)
 		
 ## Observations and Suggestions  
