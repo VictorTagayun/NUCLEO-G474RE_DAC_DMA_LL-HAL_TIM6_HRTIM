@@ -180,47 +180,47 @@ in Main.c
 							 511,  412,  315,  227,  149,   86,   38,    9,
 							   0,    9,   38,   86,  149,  227,  315,  412};
 	
-	![]()
+![Waveform of Sine12bit](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint82.jpg)
 		
 ## Waveform of Sawtooth12bit = 4096  
 		
 	for(uint16_t cntr = 0; cntr < (Sawtooth12bit_SIZE); cntr++)
 		Sawtooth12bit[cntr] = cntr;
 	
-	![]()
+![Sawtooth12bit](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint83.jpg)
 		
 ## Waveform of Sawtooth12bit - 4000  
 		
 	for(uint16_t cntr = 0; cntr < (Sawtooth12bit_SIZE - 4000); cntr++)
 		Sawtooth12bit[cntr] = cntr;
 	
-	![]()
+![](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint83.jpg)
 		
 ## Waveform of Sine1k_15k  
 		
 	const uint16_t Sine1k_15k[] = { 1861, 2597, 1744, 2099, 3102, 2379, 2300, 3419,
-									2936, 2435, 3499, 3329, 2482, 3329, 3499, 2435,
-									2936, 3419, 2300, 2379, 3102, 2099, 1744, 2597,
-									1861, 1126, 1979, 1624,  620, 1343, 1423,  304,
-									 787, 1288,  224,  394, 1241,  394,  224, 1288,
-									 787,  304, 1423, 1343,  620, 1624, 1979, 1126};
+					2936, 2435, 3499, 3329, 2482, 3329, 3499, 2435,
+					2936, 3419, 2300, 2379, 3102, 2099, 1744, 2597,
+					1861, 1126, 1979, 1624,  620, 1343, 1423,  304,
+					 787, 1288,  224,  394, 1241,  394,  224, 1288,
+					 787,  304, 1423, 1343,  620, 1624, 1979, 1126};
+
+In Excel Using Line graph  
+![Sine1k_15k_line](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/Sine48_1k_15k_line.png)
 	
-	In Excel Using Line graph  
-	![]()
-	
-	In Excel Using Bar graph  
-	![]()
-	
-	Actual DAC waveform  
-	![]()
-		
-	As can be seen, Excel waveform is better than the DAC because Excel is connecting the dots, while the DAC is holding the voltage similar to bar graph
+In Excel Using Bar graph  
+![Sine1k_15k_line](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/Sine48_1k_15k_bar.png)
+
+Actual DAC waveform  
+![Sine1k_15k_DAC](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint86.jpg)
+
+As can be seen, Excel waveform is better than the DAC because Excel is connecting the dots, while the DAC is holding the voltage similar to bar graph
 
 ## Waveform of Sine1k_10k  
 		
 The actual waveform of *Sine1k_15k* is not of very good resolution. So I generated another array using Online sine generator
 		
-Sinewave 1k
+Sinewave 1kHz, DMA is 2MSPS (500nS)  
 	uint32_t MySine2000[] =  
 	{
 		683,685,687,689,691,693,695,698,700,702,704,706,708,710,713,715,717,719,721,723,
@@ -326,13 +326,13 @@ Sinewave 1k
 	};
 	
 Actual waveform  
-![]()
+![MySine2000](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint91.jpg)
 
 Add offset  
 	MySine2000[cntr] = MySine2000[cntr] + 682;  
-![]()
+![Add offset](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint92.jpg)
 
-Sine 10k  
+Sine 10k, DMA is 2MSPS (500nS)   
 	const uint32_t MySine200[] =
 	{
 		683,704,725,747,768,789,810,831,852,873,893,914,934,954,973,992,1011,1030,1048,1066,
@@ -348,17 +348,17 @@ Sine 10k
 	};
 
 Actual waveform
-![]()
+![Sine 10k](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint93.jpg)
 
 Add together
 	MySine2000[cntr] = MySine2000[cntr] + MySine200[cntr % MySine200_SIZE];
-![]()
+![Add together](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint94.jpg)
 		
-*## Suggestions and Observations  
+## Observations and Suggestions  
 	
-	It is still ok to use HAL instead of LL because the codes will be used only during init. Problem is when you want to change the waveform on the **fly**
+It is still ok to use HAL instead of LL because the codes will be used only during init. Problem is when you want to change the waveform on the **fly**
 
-## *Timing, to check how we can change the waveforms on the **fly**  
+## Timing, to check how we can change the waveforms on the **fly**  
 
 ### Timing of DMA Interrupt
 
@@ -376,13 +376,16 @@ Add together
 
 	  /* USER CODE END DMA1_Channel1_IRQn 1 */
 	}
-1uS
-![]()
+	
+![Timing](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint95.jpg)
 
-970nS
-![]()
+1.13uS Duration  
+![1.13uS Duration](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint98.jpg)
 
-### Timing of DMA Callback  
+970nS Duration  
+![970nS Duration](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint97.jpg)
+
+### Checking of DMA Callback  
 
 	void HAL_DAC_ConvCpltCallbackCh1(DAC_HandleTypeDef *hdac)
 	{
@@ -406,12 +409,10 @@ Add together
 	  GPIOC->BSRR = (1<<(8+16));
 	}
 	
-![]()
-
-### Timing of DMA Callback  
-![]()
+![Callback](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint99.jpg)
 
 ### Timing of HAL_DAC_Start_DMA (1.25mS)  
+
 	  GPIOC->BSRR = (1<<(8));
 	  /*##- Enable DAC Channel and associated DMA ##############################*/
 	  if(HAL_OK != HAL_DAC_Start_DMA(&hdac3, DAC_CHANNEL_1,
@@ -421,15 +422,16 @@ Add together
 		Error_Handler();
 	  }
 	  GPIOC->BSRR = (1<<(8+16));
-![]()
+	  
+![HAL_DAC_Start_DMA](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint100.jpg)
 
 As shown, we cannot use **HAL_DAC_Start_DMA** every time we need to change the waveform on the fly due to very long duration of 1.25ms.
-As our DAC speed is 2MHz! or 500nS!
+As our DAC speed is 2MHz! or 500nS!  
 
 ### Find where/what code to update/change the new data to feed to DMA, in _stm32g4xx_hal_dac.c_
-
-#### Error in the code below   
 HAL_DAC_Start_DMA (stm32g4xx_hal_dac.c) > HAL_DMA_Start_IT (stm32g4xx_hal_dma.c) > DMA_SetConfig
+
+#### Testing *DMA_SetConfig* but got error in the code below and did not proceed  
 	
 	DMA_SetConfig(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t DstAddress, uint32_t DataLength)
 	where:  
@@ -438,7 +440,7 @@ HAL_DAC_Start_DMA (stm32g4xx_hal_dac.c) > HAL_DMA_Start_IT (stm32g4xx_hal_dma.c)
 		DstAddress = (uint32_t)&hdac->Instance->DHR12R2 (DAC_ALIGN_12B_R/DHR12R2)
 		DataLength = MySine2000/MySine4000_SIZE
 
-#### Use Register level instead
+#### Use Register level instead  
 inside *DMA_SetConfig* is  
 
     /* Configure DMA Channel source address */
@@ -468,19 +470,26 @@ in my case
 
 #### Every half wave change waveform  
 
-![]()
-![]()
+![](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint101.jpg)
+
+![](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint102.jpg)
 
 #### Every full wave change waveform  
 
-![]()
+![](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint104.jpg)
 
 #### Every *few* (3) full wave change waveform  
 
-![]()
+![](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint105.jpg)
 
 #### Duration of the *Callback* for full wave change waveform  
-![]()
+
+![](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint106.jpg)
+
+136nS Duration  
+![](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint107.jpg)
+
+276nS Duration  
 ![]()
 
 ### YES!!  
