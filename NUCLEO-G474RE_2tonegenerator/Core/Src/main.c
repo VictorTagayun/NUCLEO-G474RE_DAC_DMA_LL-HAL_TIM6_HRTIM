@@ -59,6 +59,7 @@ TIM_HandleTypeDef htim6;
 /* USER CODE BEGIN PV */
 
 uint32_t MySine4000[MySine4000_SIZE];
+uint32_t pass, period;
 
 /* USER CODE END PV */
 
@@ -73,8 +74,6 @@ static void MX_TIM6_Init(void);
 /* USER CODE BEGIN PFP */
 
 #define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
-//void LL_EnableDMA_DAC3(void);
-//void LL_Activate_DAC3(void);
 
 /* USER CODE END PFP */
 
@@ -137,7 +136,7 @@ int main(void)
   GPIOC->BSRR = (1<<(8));
   /*##- Enable DAC Channel and associated DMA ##############################*/
   if(HAL_OK != HAL_DAC_Start_DMA(&hdac3, DAC_CHANNEL_1,
-  				   (uint32_t*)MySine2000, MySine2000_SIZE, DAC_ALIGN_12B_R))
+  				   (uint32_t*)MySine2000, (MySine2000_SIZE), DAC_ALIGN_12B_R))
   {
   	/* Start DMA Error */
   	Error_Handler();
@@ -389,10 +388,9 @@ static void MX_TIM6_Init(void)
 static void MX_DMA_Init(void)
 {
 
-  /* Init with LL driver */
   /* DMA controller clock enable */
-  LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_DMAMUX1);
-  LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_DMA1);
+  __HAL_RCC_DMAMUX1_CLK_ENABLE();
+  __HAL_RCC_DMA1_CLK_ENABLE();
 
   /* DMA interrupt init */
   /* DMA1_Channel1_IRQn interrupt configuration */
@@ -467,7 +465,24 @@ void HAL_DAC_ConvCpltCallbackCh1(DAC_HandleTypeDef *hdac)
   /* NOTE : This function should not be modified, when the callback is needed,
             the HAL_DAC_ConvCpltCallbackCh1 could be implemented in the user file
    */
-//  GPIOC->BSRR = (1<<(8));
+
+  period++;
+  if (period == 3)
+  {
+	  period = 0;
+	  if (pass == 1)
+	  {
+		  pass = 0;
+		  hdma_dac3_ch1.Instance->CMAR = MySine4000;
+	  }
+	  else
+	  {
+		  pass = 1;
+		  hdma_dac3_ch1.Instance->CMAR = MySine2000;
+	  }
+  }
+
+
 }
 
 void HAL_DAC_ConvHalfCpltCallbackCh1(DAC_HandleTypeDef *hdac)
@@ -478,92 +493,10 @@ void HAL_DAC_ConvHalfCpltCallbackCh1(DAC_HandleTypeDef *hdac)
   /* NOTE : This function should not be modified, when the callback is needed,
             the HAL_DAC_ConvHalfCpltCallbackCh1 could be implemented in the user file
    */
-//  GPIOC->BSRR = (1<<(8+16));
 
-//  if(HAL_OK != HAL_DAC_Start_DMA(&hdac3, DAC_CHANNEL_1,
-//  				   (uint32_t*)MySine2000, MySine2000_SIZE, DAC_ALIGN_12B_R))
-//  {
-//  	/* Start DMA Error */
-//  	Error_Handler();
-//  }
-  DMA_SetConfig(&hdac3, MySine4000, DAC_ALIGN_12B_R, MySine4000_SIZE);
+//  hdma_dac3_ch1.Instance->CMAR = MySine2000;
 
 }
-
-//void LL_Activate_DAC3(void)
-//{
-//	__IO uint32_t wait_loop_index = 0;
-//
-//	/* Enable DAC channel */
-//	LL_DAC_Enable(DAC3, LL_DAC_CHANNEL_1);
-//
-//	/* Delay for DAC channel voltage settling time from DAC channel startup.    */
-//	/* Compute number of CPU cycles to wait for, from delay in us.              */
-//	/* Note: Variable divided by 2 to compensate partially                      */
-//	/*       CPU processing cycles (depends on compilation optimization).       */
-//	/* Note: If system core clock frequency is below 200kHz, wait time          */
-//	/*       is only a few CPU processing cycles.                               */
-//	wait_loop_index = ((LL_DAC_DELAY_STARTUP_VOLTAGE_SETTLING_US * (SystemCoreClock / (100000 * 2))) / 10);
-//	while(wait_loop_index != 0)
-//	{
-//		wait_loop_index--;
-//	}
-//
-//	/* Enable DAC channel trigger */
-//	/* Note: DAC channel conversion can start from trigger enable:              */
-//	/*       - if DAC channel trigger source is set to SW:                      */
-//	/*         DAC channel conversion will start after trig order               */
-//	/*         using function "LL_DAC_TrigSWConversion()".                      */
-//	/*       - if DAC channel trigger source is set to external trigger         */
-//	/*         (timer, ...):                                                    */
-//	/*         DAC channel conversion can start immediately                     */
-//	/*         (after next trig order from external trigger)                    */
-//	LL_DAC_EnableTrigger(DAC3, LL_DAC_CHANNEL_1);
-//}
-//
-//void LL_EnableDMA_DAC3(void)
-//{
-//	  /* Set DMA transfer addresses of source and destination */
-//	  LL_DMA_ConfigAddresses(DMA1,
-//							 LL_DMA_CHANNEL_1,
-//							 (uint32_t)&Sine12bit,
-//							 LL_DAC_DMA_GetRegAddr(DAC3, LL_DAC_CHANNEL_1, LL_DAC_DMA_REG_DATA_12BITS_RIGHT_ALIGNED),
-//							 LL_DMA_DIRECTION_MEMORY_TO_PERIPH);
-//
-//	  /* Set DMA transfer size */
-//	  LL_DMA_SetDataLength(DMA1,
-//						   LL_DMA_CHANNEL_1,
-//						   Sine12bit_SIZE);
-//
-//	  /* Enable DMA transfer interruption: transfer error */
-////	  LL_DMA_EnableIT_TE(DMA1,
-////	                     LL_DMA_CHANNEL_1);
-//
-//	  /* Note: In this example, the only DMA interruption activated is            */
-//	  /*       transfer error.                                                     */
-//	  /*       If needed, DMA interruptions of half of transfer                   */
-//	  /*       and transfer complete can be activated.                            */
-//	  /*       Refer to DMA examples.                                             */
-//
-//	  /* Activation of DMA */
-//	  /* Enable the DMA transfer */
-//	  LL_DMA_EnableChannel(DMA1,
-//						   LL_DMA_CHANNEL_1);
-//
-//	  /* Set DAC mode sample-and-hold timings */
-//	  // LL_DAC_SetSampleAndHoldSampleTime (DAC1, LL_DAC_CHANNEL_1, 0x3FF);
-//	  // LL_DAC_SetSampleAndHoldHoldTime   (DAC1, LL_DAC_CHANNEL_1, 0x3FF);
-//	  // LL_DAC_SetSampleAndHoldRefreshTime(DAC1, LL_DAC_CHANNEL_1, 0xFF);
-//
-//	  /* Set the mode for the selected DAC channel */
-//	  // LL_DAC_SetMode(DAC1, LL_DAC_CHANNEL_1, LL_DAC_MODE_NORMAL_OPERATION);
-//
-//	  /* Enable DAC channel DMA request */
-//	  LL_DAC_EnableDMAReq(DAC3, LL_DAC_CHANNEL_1);
-//
-//	  /* Enable interruption DAC channel1 under-run */
-////	  LL_DAC_EnableIT_DMAUDR1(DAC1);
-//}
 
 /* USER CODE END 4 */
 

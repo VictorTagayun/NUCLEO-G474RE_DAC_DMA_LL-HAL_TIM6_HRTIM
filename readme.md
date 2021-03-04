@@ -1,6 +1,13 @@
 # Setup DAC (with OpAmp follower for higher speed) DMA by HAL and LL using TIM6
+### *Optional tests:  
+	#### 2 freq/tone sinewaves  
+	#### 2 freq/tone sinewaves with every halfwave changing  
+	#### 2 freq/tone sinewaves with every fullwave changing  
+	#### 2 freq/tone sinewaves with every *few* fullwave changing  
 
-*## DAC  
+-----------
+
+## *DAC Setup 
 
 ### Parameter setting  
 use Dac3 or 4 and output to OpAmp  
@@ -15,7 +22,7 @@ Data width > Periph = Word (will not work if other data with or less)
 	
 ![]()
 	
-*## OpAmp  
+## *OpAmp Setup  
 
 ### Mode and Parameter setting  
 Follower of DAC non-inverting output  
@@ -23,7 +30,7 @@ Power Mode > High Speed
 
 ![]()
 	
-*## TIM6
+## *TIM6 Setup
 
 ### Parameter setting  
 Prescaler & ARR > set accorningly, shown below is 1Mhz
@@ -31,7 +38,7 @@ Trigger Event > Update event (other selection will not work)
 
 ![]()
 		
-*## Code by HAL  
+## * Init Code by HAL  
 
 in Main.c
 
@@ -55,7 +62,7 @@ in Main.c
 		Error_Handler();
 	}
 
-*## Code by LL  
+## * Init Code by LL  
 
 ### Enable DAC  
 
@@ -166,7 +173,7 @@ in Main.c
 	LL_TIM_EnableCounter(TIM6);
 
 	
-*## Waveform of Sine12bit  
+## *Waveform of Sine12bit  
 		
 	const uint16_t Sine12bit[32] = { 511,  611,  707,  796,  873,  937,  984, 1013,
 							1023, 1013,  984,  937,  873,  796,  707,  611,
@@ -175,21 +182,21 @@ in Main.c
 	
 	![]()
 		
-*## Waveform of Sawtooth12bit = 4096  
+## *Waveform of Sawtooth12bit = 4096  
 		
 	for(uint16_t cntr = 0; cntr < (Sawtooth12bit_SIZE); cntr++)
 		Sawtooth12bit[cntr] = cntr;
 	
 	![]()
 		
-*## Waveform of Sawtooth12bit - 4000  
+## *Waveform of Sawtooth12bit - 4000  
 		
 	for(uint16_t cntr = 0; cntr < (Sawtooth12bit_SIZE - 4000); cntr++)
 		Sawtooth12bit[cntr] = cntr;
 	
 	![]()
 		
-*## Waveform of Sine1k_15k  
+## *Waveform of Sine1k_15k  
 		
 	const uint16_t Sine1k_15k[] = { 1861, 2597, 1744, 2099, 3102, 2379, 2300, 3419,
 									2936, 2435, 3499, 3329, 2482, 3329, 3499, 2435,
@@ -207,9 +214,11 @@ in Main.c
 	Actual DAC waveform  
 	![]()
 		
-*## Waveform of Sine1k_10k  
+	As can be seen, Excel waveform is better than the DAC because Excel is connecting the dots, while the DAC is holding the voltage similar to bar graph
+
+## *Waveform of Sine1k_10k  
 		
-The actual waveform is not of very good resolution. So I generated another array using Online sine generator
+The actual waveform of *Sine1k_15k* is not of very good resolution. So I generated another array using Online sine generator
 		
 Sinewave 1k
 	uint32_t MySine2000[] =
@@ -347,7 +356,9 @@ Add together
 		
 *## Suggestions and Observations  
 	
-	It is still ok to use HAL instead of LL because the codes will be used only during init.
+	It is still ok to use HAL instead of LL because the codes will be used only during init. Problem is when you want to change the waveform on the **fly**
+
+## *Timing, to check how we can change the waveforms on the **fly**  
 
 ### Timing of DMA Interrupt
 
@@ -412,6 +423,9 @@ Add together
 	  GPIOC->BSRR = (1<<(8+16));
 ![]()
 
+As shown, we cannot use **HAL_DAC_Start_DMA** every time we need to change the waveform on the fly due to very long duration of 1.25ms.
+As out DAC speed is 2MHz! or 500nS!
+
 ### Find where/what ode to update/change the new data to feed to DMA, in _stm32g4xx_hal_dac.c_
 
 #### Error
@@ -424,8 +438,22 @@ HAL_DAC_Start_DMA (stm32g4xx_hal_dac.c) > HAL_DMA_Start_IT (stm32g4xx_hal_dma.c)
 		DstAddress = (uint32_t)&hdac->Instance->DHR12R2 (DAC_ALIGN_12B_R/DHR12R2)
 		DataLength = MySine2000/MySine4000_SIZE
 
-#### Use LL_DMA_ConfigAddresses
+#### Use Register level
+	hdma_dac3_ch1.Instance->CMAR = MySine4000;
 
+##### Every half wave shange waveform  
+
+![]()
+
+##### Every full wave shange waveform  
+
+![]()
+
+##### Every *few* full wave shange waveform  
+
+![]()
+
+###YES!!  
 
 ### Online sine generator
 
