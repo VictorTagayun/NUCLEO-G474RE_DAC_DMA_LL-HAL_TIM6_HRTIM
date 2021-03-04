@@ -466,6 +466,7 @@ void HAL_DAC_ConvCpltCallbackCh1(DAC_HandleTypeDef *hdac)
             the HAL_DAC_ConvCpltCallbackCh1 could be implemented in the user file
    */
 
+  GPIOC->BSRR = (1<<(8));
   period++;
   if (period == 3)
   {
@@ -481,22 +482,24 @@ void HAL_DAC_ConvCpltCallbackCh1(DAC_HandleTypeDef *hdac)
 		  hdma_dac3_ch1.Instance->CMAR = MySine2000;
 	  }
   }
+  GPIOC->BSRR = (1<<(8+16));
 
+//  hdma_dac3_ch1.Instance->CMAR = MySine4000;
 
 }
 
-void HAL_DAC_ConvHalfCpltCallbackCh1(DAC_HandleTypeDef *hdac)
-{
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hdac);
-
-  /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_DAC_ConvHalfCpltCallbackCh1 could be implemented in the user file
-   */
-
+//void HAL_DAC_ConvHalfCpltCallbackCh1(DAC_HandleTypeDef *hdac)
+//{
+//  /* Prevent unused argument(s) compilation warning */
+//  UNUSED(hdac);
+//
+//  /* NOTE : This function should not be modified, when the callback is needed,
+//            the HAL_DAC_ConvHalfCpltCallbackCh1 could be implemented in the user file
+//   */
+//
 //  hdma_dac3_ch1.Instance->CMAR = MySine2000;
-
-}
+//
+//}
 
 /* USER CODE END 4 */
 
