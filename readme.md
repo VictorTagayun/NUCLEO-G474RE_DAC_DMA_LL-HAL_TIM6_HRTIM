@@ -62,7 +62,7 @@ in Main.c
 		Error_Handler();
 	}
 
-## nit Code by LL  
+## Init Code by LL  
 
 ### Enable DAC  
 
