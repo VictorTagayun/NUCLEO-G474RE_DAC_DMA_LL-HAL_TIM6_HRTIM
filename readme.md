@@ -1,4 +1,6 @@
 # Setup DAC (with OpAmp follower for higher speed) DMA by HAL and LL using TIM6
+How to setup DAC with OpAmp for DMA  
+
 ### Optional tests:  
 	#### 2 freq/tone sinewaves  
 	#### 2 freq/tone sinewaves with every halfwave changing  
