@@ -490,7 +490,7 @@ in my case
 ![](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint107.jpg)
 
 276nS Duration  
-![]()
+![](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint108.jpg)
 
 ### YES!!  
 
