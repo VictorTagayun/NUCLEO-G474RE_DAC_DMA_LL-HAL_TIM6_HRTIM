@@ -506,6 +506,8 @@ in my case
 
 [Online sine generator](https://www.daycounter.com/Calculators/Sine-Generator-Calculator.phtml)
 
+[DAC Speed testing](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_SpeedTest)
+
 *Disclaimer:*
 
 *The projects posted here are for learning and educational purposes only.*
