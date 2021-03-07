@@ -2,10 +2,12 @@
 How to setup DAC with OpAmp for DMA  
 
 ### Optional tests:  
-	#### 2 freq/tone sinewaves  
-	#### 2 freq/tone sinewaves with every halfwave changing  
-	#### 2 freq/tone sinewaves with every fullwave changing  
-	#### 2 freq/tone sinewaves with every *few* fullwave changing  
+
+	- 2 freq/tone sinewaves  
+	- 2 freq/tone sinewaves with every halfwave changing  
+	- 2 freq/tone sinewaves with every fullwave changing  
+	- 2 freq/tone sinewaves with every *few* fullwave changing  
+	- Dac Speed Test
 
 -----------
 
@@ -328,8 +330,10 @@ Sinewave 1kHz, DMA is 2MSPS (500nS)
 		640,642,644,646,648,650,652,655,657,659,661,663,665,667,670,672,674,676,678,680
 	};
 	
-Actual waveform  
+Actual waveforms  
 ![MySine2000](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint91.jpg)
+
+![DS1Z_QuickPrint110.jpg]()
 
 Add offset  
 
@@ -501,6 +505,47 @@ in my case
 ![](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint108.jpg)
 
 ### YES!!  
+
+
+### DAC Speed
+
+From [previous project](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_SpeedTest) where we checked how fast the DAC can achieve from minimum to maximum transition, we had around 4.74Mhz!
+
+![](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_SpeedTest/blob/main/waveforms/DS1Z_QuickPrint81.jpg)
+
+Now we use [Sine12bit](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/51186868f263d2b9add39d1ad09b27fbb80560f4/NUCLEO-G474RE_2tonegenerator/Core/Inc/waveforms.h#L10) for a more coarse sine wave to observe the DAC steps better.
+
+Sine12bit running at 2Mhz/2MSPS
+
+![DS1Z_QuickPrint111.jpg](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint111.jpg)
+
+![DS1Z_QuickPrint110.jpg](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint110.jpg)
+
+We can try til 14.7Mhz/MSPS
+
+![DS1Z_QuickPrint112.jpg](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint112.jpg)
+
+But is it now acting erratic
+
+![DS1Z_QuickPrint115.jpg](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint115.jpg)
+
+![DS1Z_QuickPrint117.jpg](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint117.jpg)
+
+It is now due to DMA interrupt, so we disable it and run til around 17Mhz/MSPS
+
+![DS1Z_QuickPrint120.jpg](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint120.jpg)
+
+With 32sample points and TIM6 running @ 170Mhz/(5 X 2), we have a freq of the Sine12bit as 532kHz as shown
+
+![DS1Z_QuickPrint121.jpg](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint121.jpg)
+
+Some abnormal reaction if we increase further 17Mhz/MSPS, like 4.2Mhz/MSPS for TIM6 = 170Mhz/(2 X 2), the 32sample of the sine have different freq
+
+![DS1Z_QuickPrint122.jpg](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint122.jpg)
+
+### TO dots
+
+Investigate when TIM6 or DAC is more than 17Mhz/MSPS
 
 ### Other Reference :
 
