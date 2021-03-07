@@ -543,7 +543,7 @@ Some abnormal reaction if we increase further 17Mhz/MSPS, like 4.2Mhz/MSPS for T
 
 ![DS1Z_QuickPrint122.jpg](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_DMA_LL-HAL_TIM6/blob/main/photos-waveforms%26generator/DS1Z_QuickPrint122.jpg)
 
-### TO dots
+### TO do
 
 Investigate when TIM6 or DAC is more than 17Mhz/MSPS
 
