@@ -7,7 +7,7 @@ How to setup DAC with OpAmp for DMA
 	- 2 freq/tone sinewaves with every halfwave changing  
 	- 2 freq/tone sinewaves with every fullwave changing  
 	- 2 freq/tone sinewaves with every *few* fullwave changing  
-	- Dac Speed Test
+	- Dac Speed Test using sinewave
 
 -----------
 
@@ -507,9 +507,9 @@ in my case
 ### YES!!  
 
 
-### DAC Speed
+### DAC Speed using sinewave
 
-From [previous project](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_SpeedTest) where we checked how fast the DAC can achieve from minimum to maximum transition, we had around 4.74Mhz!
+From [previous project](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_SpeedTest) where we checked how fast the DAC can achieve from minimum to maximum transition, we had around 4.74Mhz! Of course that is worst case, but for this test, we will be using sinewave and the transition will not be as worse.
 
 ![](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_SpeedTest/blob/main/waveforms/DS1Z_QuickPrint81.jpg)
 
