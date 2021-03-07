@@ -118,13 +118,19 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
 
-  for (uint16_t cntr = 0; cntr < MySine2000_SIZE; cntr++)
-  {
-	  MySine2000[cntr] += 682;
-	  MySine4000[cntr] = MySine2000[cntr];
-	  MySine2000[cntr] += MySine200[cntr % MySine200_SIZE];
-  }
+//  for (uint16_t cntr = 0; cntr < MySine2000_SIZE; cntr++)
+//  {
+//	  MySine2000[cntr] += 682;
+//	  MySine4000[cntr] = MySine2000[cntr];
+//	  MySine2000[cntr] += MySine200[cntr % MySine200_SIZE];
+//  }
 
+  for (uint16_t cntr = 0; cntr < Sine12bit_SIZE; cntr++)
+  {
+	  Sine12bit[cntr] += 682;
+//	  MySine4000[cntr] = MySine2000[cntr];
+//	  MySine2000[cntr] += MySine200[cntr % MySine200_SIZE];
+  }
 
 
 //	printf("Sine1k_15k = 1k + 10k \n");
@@ -136,7 +142,7 @@ int main(void)
   GPIOC->BSRR = (1<<(8));
   /*##- Enable DAC Channel and associated DMA ##############################*/
   if(HAL_OK != HAL_DAC_Start_DMA(&hdac3, DAC_CHANNEL_1,
-  				   (uint32_t*)MySine2000, (MySine2000_SIZE), DAC_ALIGN_12B_R))
+  				   (uint32_t*)Sine12bit, (Sine12bit_SIZE), DAC_ALIGN_12B_R))
   {
   	/* Start DMA Error */
   	Error_Handler();
@@ -362,9 +368,9 @@ static void MX_TIM6_Init(void)
 
   /* USER CODE END TIM6_Init 1 */
   htim6.Instance = TIM6;
-  htim6.Init.Prescaler = 17-1;
+  htim6.Init.Prescaler = 2-1;
   htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim6.Init.Period = 4;
+  htim6.Init.Period = 1;
   htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
   {
@@ -457,36 +463,36 @@ PUTCHAR_PROTOTYPE
   return ch;
 }
 
-void HAL_DAC_ConvCpltCallbackCh1(DAC_HandleTypeDef *hdac)
-{
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hdac);
-
-  /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_DAC_ConvCpltCallbackCh1 could be implemented in the user file
-   */
-
-  GPIOC->BSRR = (1<<(8));
-  period++;
-  if (period == 3)
-  {
-	  period = 0;
-	  if (pass == 1)
-	  {
-		  pass = 0;
-		  hdma_dac3_ch1.Instance->CMAR = MySine4000;
-	  }
-	  else
-	  {
-		  pass = 1;
-		  hdma_dac3_ch1.Instance->CMAR = MySine2000;
-	  }
-  }
-  GPIOC->BSRR = (1<<(8+16));
-
-//  hdma_dac3_ch1.Instance->CMAR = MySine4000;
-
-}
+//void HAL_DAC_ConvCpltCallbackCh1(DAC_HandleTypeDef *hdac)
+//{
+//  /* Prevent unused argument(s) compilation warning */
+//  UNUSED(hdac);
+//
+//  /* NOTE : This function should not be modified, when the callback is needed,
+//            the HAL_DAC_ConvCpltCallbackCh1 could be implemented in the user file
+//   */
+//
+//  GPIOC->BSRR = (1<<(8));
+//  period++;
+//  if (period == 3)
+//  {
+//	  period = 0;
+//	  if (pass == 1)
+//	  {
+//		  pass = 0;
+//		  hdma_dac3_ch1.Instance->CMAR = MySine4000;
+//	  }
+//	  else
+//	  {
+//		  pass = 1;
+//		  hdma_dac3_ch1.Instance->CMAR = MySine2000;
+//	  }
+//  }
+//  GPIOC->BSRR = (1<<(8+16));
+//
+////  hdma_dac3_ch1.Instance->CMAR = MySine4000;
+//
+//}
 
 //void HAL_DAC_ConvHalfCpltCallbackCh1(DAC_HandleTypeDef *hdac)
 //{
