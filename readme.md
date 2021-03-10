@@ -1,4 +1,4 @@
-# Setup DAC (with OpAmp follower for higher speed) DMA by HAL and LL using TIM6
+# Setup DAC (with OpAmp follower for higher speed) DMA by HAL and LL using TIM6 and HRTIM
 How to setup DAC with OpAmp for DMA  
 
 ### Optional tests:  
@@ -8,6 +8,7 @@ How to setup DAC with OpAmp for DMA
 	- 2 freq/tone sinewaves with every fullwave changing  
 	- 2 freq/tone sinewaves with every *few* fullwave changing  
 	- Dac Speed Test using sinewave
+	- Added DAC trigger by HRTIM external pins still [troubleshooting internal trigger](https://github.com/VictorTagayun/HRTIM_DAC_Trigger_Troubleshooting)
 
 -----------
 
@@ -552,6 +553,8 @@ Investigate when TIM6 or DAC is more than 17Mhz/MSPS
 [Online sine generator](https://www.daycounter.com/Calculators/Sine-Generator-Calculator.phtml)
 
 [DAC Speed testing](https://github.com/VictorTagayun/NUCLEO-G474RE_DAC_SpeedTest)
+
+[Troubleshooting HRTIM internal trigger](https://github.com/VictorTagayun/HRTIM_DAC_Trigger_Troubleshooting)
 
 *Disclaimer:*
 

@@ -136,11 +136,12 @@ int main(void)
   	Error_Handler();
   }
 
-  /*##- Enable TIM peripheral counter ######################################*/
-  if(HAL_OK != HAL_TIM_Base_Start(&htim6))
-  {
-  	Error_Handler();
-  }
+//  /*##- Enable TIM peripheral counter ######################################*/
+//  if(HAL_OK != HAL_TIM_Base_Start(&htim6))
+//  {
+//  	Error_Handler();
+//  }
+
   /*##- Start OPAMP    #####################################################*/
   /* Enable OPAMP */
   if(HAL_OK != HAL_OPAMP_Start(&hopamp6))
@@ -305,7 +306,6 @@ static void MX_HRTIM1_Init(void)
     Error_Handler();
   }
   pTimerCtl.UpDownMode = HRTIM_TIMERUPDOWNMODE_UP;
-  pTimerCtl.GreaterCMP1 = HRTIM_TIMERGTCMP1_EQUAL;
   pTimerCtl.DualChannelDacEnable = HRTIM_TIMER_DCDE_DISABLED;
   if (HAL_HRTIM_WaveformTimerControl(&hhrtim1, HRTIM_TIMERINDEX_TIMER_B, &pTimerCtl) != HAL_OK)
   {
@@ -317,7 +317,7 @@ static void MX_HRTIM1_Init(void)
   pTimerCfg.DMADstAddress = 0x0000;
   pTimerCfg.DMASize = 0x1;
   pTimerCfg.HalfModeEnable = HRTIM_HALFMODE_DISABLED;
-  pTimerCfg.InterleavedMode = HRTIM_INTERLEAVED_MODE_DUAL;
+  pTimerCfg.InterleavedMode = HRTIM_INTERLEAVED_MODE_DISABLED;
   pTimerCfg.StartOnSync = HRTIM_SYNCSTART_DISABLED;
   pTimerCfg.ResetOnSync = HRTIM_SYNCRESET_DISABLED;
   pTimerCfg.DACSynchro = HRTIM_DACSYNC_NONE;
@@ -339,8 +339,18 @@ static void MX_HRTIM1_Init(void)
     Error_Handler();
   }
   pTimerCfg.InterruptRequests = HRTIM_MASTER_IT_NONE;
+  pTimerCfg.InterleavedMode = HRTIM_INTERLEAVED_MODE_DUAL;
   pTimerCfg.DelayedProtectionMode = HRTIM_TIMER_D_E_DELAYEDPROTECTION_DISABLED;
   if (HAL_HRTIM_WaveformTimerConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_E, &pTimerCfg) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_HRTIM_TimeBaseConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_E, &pTimeBaseCfg) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  pTimerCtl.GreaterCMP1 = HRTIM_TIMERGTCMP1_EQUAL;
+  if (HAL_HRTIM_WaveformTimerControl(&hhrtim1, HRTIM_TIMERINDEX_TIMER_E, &pTimerCtl) != HAL_OK)
   {
     Error_Handler();
   }
@@ -352,19 +362,7 @@ static void MX_HRTIM1_Init(void)
   pOutputCfg.FaultLevel = HRTIM_OUTPUTFAULTLEVEL_NONE;
   pOutputCfg.ChopperModeEnable = HRTIM_OUTPUTCHOPPERMODE_DISABLED;
   pOutputCfg.BurstModeEntryDelayed = HRTIM_OUTPUTBURSTMODEENTRY_REGULAR;
-  if (HAL_HRTIM_WaveformOutputConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_B, HRTIM_OUTPUT_TB1, &pOutputCfg) != HAL_OK)
-  {
-    Error_Handler();
-  }
   if (HAL_HRTIM_WaveformOutputConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_E, HRTIM_OUTPUT_TE1, &pOutputCfg) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_HRTIM_TimeBaseConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_E, &pTimeBaseCfg) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_HRTIM_WaveformTimerControl(&hhrtim1, HRTIM_TIMERINDEX_TIMER_E, &pTimerCtl) != HAL_OK)
   {
     Error_Handler();
   }
