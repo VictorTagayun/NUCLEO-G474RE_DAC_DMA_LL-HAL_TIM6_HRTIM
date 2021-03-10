@@ -3,12 +3,12 @@ How to setup DAC with OpAmp for DMA
 
 ### Optional tests:  
 
-	- 2 freq/tone sinewaves  
-	- 2 freq/tone sinewaves with every halfwave changing  
-	- 2 freq/tone sinewaves with every fullwave changing  
-	- 2 freq/tone sinewaves with every *few* fullwave changing  
-	- Dac Speed Test using sinewave
-	- Added DAC trigger by HRTIM external pins still [troubleshooting internal trigger](https://github.com/VictorTagayun/HRTIM_DAC_Trigger_Troubleshooting)
+- 2 freq/tone sinewaves  
+- 2 freq/tone sinewaves with every halfwave changing  
+- 2 freq/tone sinewaves with every fullwave changing  
+- 2 freq/tone sinewaves with every *few* fullwave changing  
+- Dac Speed Test using sinewave
+- Added DAC trigger by HRTIM external pins still [troubleshooting internal trigger](https://github.com/VictorTagayun/HRTIM_DAC_Trigger_Troubleshooting)
 
 -----------
 
